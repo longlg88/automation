@@ -1,0 +1,4 @@
+---
+
+- name: execute iaas table sql
+  shell: "tbsql {{ tid }}/{{ tpw }} @/{{ user }}/automation/db_files/sql_script/create_table.sql"

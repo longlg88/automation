@@ -1,0 +1,12 @@
+---
+- name: Make delete log directory
+  file: path=/root/delete_log state=directory
+
+- name: Delete automation directory
+  file: path=/root/automation state=absent
+
+- name: stop tibero
+  shell: tbdown
+
+- name: Delete tibero6 directory
+  file: path=/root/tibero6 state=absent

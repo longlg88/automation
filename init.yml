@@ -1,0 +1,9 @@
+---
+
+- name: Apply initial configuration to all nodes
+  hosts: '{{ hosts }}'
+  remote_user: '{{ user }}'
+  vars_files:
+    - "vars/external_vars.yml"
+  roles:
+    - { role: init, role_name: "init" }

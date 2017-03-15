@@ -1,0 +1,14 @@
+ - name: Copy pacake remove shell
+   copy: src=delete_lxc.sh dest=/{{ user }}/automation/compute/delete_lxc.sh owner={{ user }} mode=0755
+
+ - name: Execute shell
+   shell: /{{ user }}/automation/compute/delete_lxc.sh  >> /{{ user }}/automation/log/progress
+   when: ansible_distribution == "Ubuntu"
+
+ - name: Clean path
+   file:
+     state: absent
+     path: /{{ user }}/automation/{{ item }}
+   with_items:
+     - compute
+     - delete_compute

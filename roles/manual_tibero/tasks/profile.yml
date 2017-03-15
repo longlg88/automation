@@ -1,0 +1,47 @@
+---
+- name: profile bash_profile
+  stat: 
+    path="{{ user_home }}/.bash_profile"
+  register: bprof
+  
+
+- name: Adding the path in the Profile(.bash_profile) files
+  lineinfile: 
+    dest: "{{ user_home }}/.bash_profile" 
+    line: "{{ item.line }}"
+    #state: absent
+    backup: yes
+#    create: yes
+    insertafter: "{{ item.after }}" 
+  with_items:
+    - { line: "################add#####################
+               \nexport TB_HOME={{ tb_home }}
+               \nexport TB_SID={{ tb_sid }}
+               \nexport PATH=$TB_HOME/bin:$TB_HOME/client/bin:$PATH
+               \nexport LD_LIBRARY_PATH=$TB_HOME/lib:$TB_HOME/client/lib
+               \n################end#####################", after: "EOF" }
+  when: bprof.stat.exists == True
+
+- name: profile profile
+  stat:
+    path="{{ user_home }}/.profile"
+  register: prof
+
+
+- name: Adding the path in the Profile(.profile) files
+  lineinfile:
+    dest: "{{ user_home }}/.profile"
+    line: "{{ item.line }}"
+    #state: absent
+    backup: yes
+#    create: yes
+    insertafter: "{{ item.after }}"
+  with_items:
+    - { line: "################add#####################
+               \nexport TB_HOME={{ tb_home }}
+               \nexport TB_SID={{ tb_sid }}
+               \nexport PATH=$TB_HOME/bin:$TB_HOME/client/bin:$PATH
+               \nexport LD_LIBRARY_PATH=$TB_HOME/lib:$TB_HOME/client/lib 
+               \n################end#####################", after: "EOF" }
+  when: prof.stat.exists == True
+ 

@@ -1,0 +1,66 @@
+---
+
+- name: Make main recursive directory(PO7)
+  file: path=/{{ user }}/automation/{{ item }} state=directory
+  with_items:
+    - po7
+- name: Make docker binary directory
+  file: path=/{{ user }}/automation/initial/{{ item }} state=directory
+  with_items:
+    - docker_binary
+
+# setting docker install shell & update & install docker 
+- name: Copy docker install shell centos
+  copy: src=docker_install_centos.sh dest=/{{ user }}/automation/initial/docker_install.sh owner={{ user }} mode=0755
+  when: ansible_distribution == "CentOS"
+
+- name: Copy docker install shell on ubuntu
+  copy: src=docker_install_ubuntu.sh dest=/{{ user }}/automation/initial/docker_install.sh owner={{ user }} mode=0755
+  when: ansible_distribution == "Ubuntu"
+
+- name: Execute docker install shell <update & install docker>
+  shell: /{{ user }}/automation/initial/docker_install.sh 2>&1 | tee /{{ user }}/automation/log/progress
+
+
+# setting modified docker binaries
+- name: Copy modified docker binaries
+  copy: src=binary/docker_binary.tar dest=/{{ user }}/automation/initial/docker_binary.tar owner={{ user }} mode=0755
+  when: ansible_distribution == "Ubuntu"
+
+- name: Copy unarchive_setting.sh
+  copy: src=unarchive_setting.sh dest=/{{ user }}/automation/initial owner={{ user }} mode=0755
+  when: ansible_distribution == "Ubuntu"
+
+- name: Unarchive docker binary tar & modify
+  shell: /{{ user }}/automation/initial/unarchive_setting.sh 2>&1 >> /{{ user }}/automation/log/progress
+  when: ansible_distribution == "Ubuntu"
+
+# setting po7 tar file
+- name: Copy po7 tar
+  copy: src=binary/newpo7b006v1.tar dest=/{{ user }}/automation/po7/newpo7b006v1.tar owner={{ user }} mode=0644
+- name: Copy proobject tar
+  copy: src=binary/proobject7.tar.gz dest=/{{ user }}/automation/po7/proobject7.tar.gz owner={{ user }} mode=0644
+
+# unzip po7 tar file
+- name: Unzip po7 tar file
+  unarchive:
+    src: /{{ user }}/automation/po7/proobject7.tar.gz
+    dest: /{{ user }}/automation/po7
+    remote_src: True
+
+# copy po7 log file
+- name: Copy po7 log file
+  copy: src=logs/ dest=/{{ user }}/automation/po7/proobject7/logs/ owner={{ user }} mode=0755
+
+# setting po7 run shell
+- name: Setting po7 run shell
+  copy: src=po7_run.sh dest=/{{ user }}/automation/po7/po7_run.sh owner={{ user }} mode=0755
+
+# setting po7 log directory
+- name: Setting po7 log directory
+  file: path=/{{ user }}/automation/po7/po7log state=touch owner={{ user }} mode=0755
+
+
+# run po7
+- name: Run po7
+  shell: /root/automation/po7/po7_run.sh

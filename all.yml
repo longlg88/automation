@@ -1,0 +1,5 @@
+---
+
+- include: auto_run_init.yml
+- include: auto_run_db.yml
+- include: auto_run_po.yml

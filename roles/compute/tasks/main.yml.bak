@@ -1,0 +1,12 @@
+---
+- name: Make recursive directory 
+  file: path=/{{ user }}/automation/{{ item }} state=directory
+  with_items:
+    - compute
+
+- name: Copy pacakge install shell
+  copy: src=lxc.sh dest=/{{ user }}/automation/compute/lxc.sh owner={{ user }} mode=0755
+
+- name: Execute shell
+  shell: /{{ user }}/automation/compute/lxc.sh 2>&1 >> /{{ user }}/automation/log/progress 
+  when: ansible_distribution == "Ubuntu"

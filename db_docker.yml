@@ -1,0 +1,15 @@
+---
+
+- name: Run Tibero6 with docker
+  hosts: '{{ hosts }}'
+  remote_user: '{{ user }}'
+  environment:
+    TIBERO_PORT: '{{ tport }}'
+    TIBERO_USER: '{{ tid }}'
+    TIBERO_PW: '{{ tpw }}'
+    DB_IMAGE_NAME: '{{ db_image_name }}'
+  vars_files:
+    - "vars/external_vars.yml"
+
+  roles:
+    - docker_tibero

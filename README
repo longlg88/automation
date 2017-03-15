@@ -1,0 +1,41 @@
+[automation 내용]
+LINUX CentOS 7.0 기준 version
+LINUX Ubuntu 16.04 version 추가
+20170307 README 수정 
+
+[hosts 값 지정]
+/etc/ansible/hosts 에 hosts variable 추가
+
+ex)
+[test]
+xxx.xxx.xxx.xxx
+
+[files 다운로드]
+ANSIBLE_HOME 지정 : ANSIBLE_HOME=/root/...
+
+scp -r root@192.168.2.198:/root/developenv/auto/binary $ANSIBLE_HOME/roles/init/files
+
+[automation 사용]
+
+./new_run.sh -h                     help
+./new_run.sh -H [host] command      host를 입력하고 command를 실행      
+ex) command 예
+1. ./new_run.sh -H [host] init          initial 설정만 진행
+2. ./new_run.sh -H [host] rundbmanual   tibero를 수동 설치 실행
+3. ./new_run.sh -H [host] rundb         docker container를 이용한 설치 실행
+4. ./new_run.sh -H [host] runpo         po7만 실행
+5. ./new_run.sh -H [host] runcompute    LXC setting 및 설치
+6. ./new_run.sh -H [host] runall        1,2,3 모두 자동 실행
+7. ./new_run.sh -H [host] test          test 실행
+8. ./new_run.sh -H [host] delete        원격 host내에 모든 설정과 파일을 삭제
+
+
+
+
+[automation에서 사용하고 있는 yml]
+
+auto_run_init.yml
+auto_run_db.yml
+auto_run_po.yml
+auto_run_test.yml
+auto_run_delete.yml

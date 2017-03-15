@@ -1,0 +1,29 @@
+---
+- name: Make main directory(ALL)
+  file: path=/{{ user }}/automation state=directory
+
+- name: Make main recursive directory(ALL)
+  file: path=/{{ user }}/automation/{{ item }} state=directory
+  with_items:
+    - initial
+    - log
+  
+- name: Copy time shell
+  copy: src=time.sh dest=/{{ user }}/automation/initial/time.sh owner={{ user }} mode=0755
+  when: ansible_distribution == "CentOS"
+- name: Execute time shell <setting time>
+  shell: /{{ user }}/automation/initial/time.sh 2>&1 | tee /{{ user }}/automation/log/progress
+  when: ansible_distribution == "Centos"
+
+- name: delete init shell
+  file: path=/{{ user }}/automation/initial/init.sh state=absent
+    
+
+- name: Copy initialize shell
+  copy: src=init_ubuntu.sh dest=/{{ user }}/automation/initial/init.sh owner={{ user }} mode=0755
+  when: ansible_distribution == "Ubuntu"
+
+- name: Execute initialize shell
+  shell: /{{ user }}/automation/initial/init.sh 2>&1 | tee /{{ user }}/automation/log/progress
+  when: ansible_distribution == "Ubuntu"
+

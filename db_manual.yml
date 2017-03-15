@@ -1,0 +1,20 @@
+---
+- name: Init ansible home
+  hosts: all
+  remote_user: root
+ 
+- name: Run Tibero6 with manual
+  hosts: '{{ hosts }}'
+  remote_user: '{{ user }}'
+  environment:
+    TB_HOME: '{{ tb_home }}'
+    TB_SID: '{{ tb_sid }}'
+    PATH: "{{ tb_home }}/bin:{{ tb_home }}/client/bin:{{ ansi_path }}"
+    LD_LIBRARY_PATH: "{{ tb_home }}/lib:{{ tb_home }}/client/lib"
+    TID: '{{ tid }}'
+    TPW: '{{ tpw }}'
+  vars_files:
+    - "vars/external_vars.yml"
+
+  roles:
+    - manual_tibero

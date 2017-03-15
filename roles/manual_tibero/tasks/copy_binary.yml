@@ -1,0 +1,19 @@
+---
+- name: copy install packages
+  copy: src={{ item }}
+        dest=/{{ user }}/automation/db_files/
+  with_items:
+    - "sql_script"
+    - "license"
+
+- name: copy make user sql
+  copy: src=gen_makeusersql.sh dest=/{{ user }}/automation/db_files owner={{ user }} mode=0755
+
+- name: setting make_user.sql
+  shell: "/{{ user }}/automation/db_files/gen_makeusersql.sh"
+
+- name: copy gen setenv
+  copy: src=gen_setenv.sh dest=/{{ user }}/automation/db_files owner={{ user }} mode=0755
+
+- name: copy initial iaas db sql
+  copy: src=sql_script/create_table.sql dest=/{{ user }}/automation/db_files/sql_script owner={{ user }} mode=0755

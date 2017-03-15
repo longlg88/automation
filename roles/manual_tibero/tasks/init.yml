@@ -1,0 +1,29 @@
+---
+- name: install init pkg From Ubuntu
+  apt:
+    name: '{{ item }}'
+  when: ansible_distribution == "Ubuntu"
+  register: utpkg_result
+  with_items:
+    - "gcc"
+    - "g++"
+    - "libstdc++5"
+    - "libaio1"
+    - "libaio-dev"
+
+- name: install init pkg from CentOS
+  yum:
+    name: "{{ item }}"
+  when: ansible_distribution == "CentOS"
+  register: copkg_result
+  with_items:
+    - "gcc"
+    - "gcc-c++"
+    - "compat-libstdc++-33"
+    - "libaio"
+    - "libaio-devel"
+
+- name: Make main recursive directory(DB)
+  file: path=/{{ user }}/automation/{{ item }} state=directory
+  with_items:
+    - db_files

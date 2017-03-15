@@ -1,0 +1,13 @@
+---
+- name: Make recursive directory
+  file: path=/{{ user }}/automation/{{ item }} state=directory
+  with_items:
+    - storage
+
+- name: Copy zfs shell
+  copy: src=zfs.sh dest=/{{ user }}/automation/storage/zfs.sh owner={{ user }} mode=0755
+  when: ansible_distribution == "Ubuntu"
+
+- name: Execute zfs shell
+  shell: /{{ user }}/automation/zfs.sh 2>&1 | tee /{{ user }}/automation/log/progress
+  when: ansible_distribution == "Ubuntu"

@@ -1,0 +1,8 @@
+---
+- include: init.yml
+#- include: profile.yml
+- include: copy_binary.yml
+- include: gtar_binary.yml
+- include: create_database.yml
+#- include: copy_datafile.yml
+- include: make_iaasdb.yml

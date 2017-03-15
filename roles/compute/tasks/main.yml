@@ -1,0 +1,37 @@
+---
+ - name: Install lxc package
+   apt:
+     name: lxc
+     state: present
+   when: ansible_distribution == "Ubuntu"
+
+ - name: Install bridge-utils
+   apt:
+     name: bridge-utils
+     state: present
+   when: ansible_distribution == "Ubuntu"
+
+ - name: Install curl
+   apt:
+     name: curl
+     state: present
+   when: ansible_distribution == "Ubuntu"
+
+ - name: Make compute directory
+   file: path=/{{ user }}/automation/{{ item }} state=directory
+   with_items:
+     - compute
+
+# - name: Copy brctl shell
+#   copy: src=brctl.sh dest=/{{ user }}/automation/compute/brctl.sh owner={{ user }} mode=0755
+#   when: ansible_distribution == "Ubuntu"
+
+# - name: Install brctl
+#   shell: "sh /{{ user }}/automation/compute/brctl.sh"
+#   when: ansible_distribution == "Ubuntu"
+
+ - name: Install sshpass
+   apt:
+     name: sshpass
+     state: present
+   when: ansible_distribution == "Ubuntu"

@@ -1,0 +1,18 @@
+---
+- name: Make delete log directory
+  file: path=/root/delete_log state=directory
+
+- name: Delete automation directory
+  file: path=/root/automation state=absent
+
+- name: Copy delete docker shell(CENTOS)
+  copy: src=delete_centos.sh dest=/root/delete_log/delete.sh owner=root mode=0755
+  when: ansible_distribution == "CentOS"
+
+- name: Copy delete docker shell(UBUNTU)
+  copy: src=delete_ubuntu.sh dest=/root/delete_log/delete.sh owner=root mode=0755
+  when: ansible_distribution == "Ubuntu"
+
+- name: Delete docker
+  shell: /root/delete_log/delete.sh 2>&1 >> /root/delete_log/deletelog
+

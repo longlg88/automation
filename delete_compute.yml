@@ -1,0 +1,8 @@
+- name: Clean compute
+  hosts: '{{ hosts }}'
+  remote_user: '{{ user }}'
+  vars_files:
+    - "vars/external_vars.yml"
+
+  roles:
+    - delete_compute

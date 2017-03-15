@@ -1,0 +1,18 @@
+---
+- name: delete cpuinfo, meminfo
+  shell: rm -f cpuinfo meminfo
+- name: Copy cpuinfo shell
+  copy: src=cpuinfo.sh dest=/{{ user }}/ owner={{ user }} mode=0755
+- name: Copy meminfo shell
+  copy: src=meminfo.sh dest=/{{ user }}/ owner={{ user }} mode=0755
+- name: Execute cpuinfo
+  shell: /{{ user }}/cpuinfo.sh
+- name: Execute meminfo
+  shell: /{{ user }}/meminfo.sh
+#- name: Download cpuinfo, meminfo
+#  get_url:
+#    url: 
+  
+
+#- name: Delete test directory
+#  file: path=/root/testing_automation state=absent

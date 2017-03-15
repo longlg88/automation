@@ -1,0 +1,30 @@
+---
+- name: tbdown
+  shell: "{{ tb_home }}/bin/tbdown"
+
+- name: backup datafile
+  shell: "cp -r /{{ user }}/tibero6/database/ /{{ user }}/automation/db_files/"
+
+- name: delete datafile
+  shell: "rm -rf /{{ user }}/tibero6/database/*"
+
+- name: rename datafile
+  shell: "mv /{{ user }}/automation/db_files/database/ /{{ user }}/automation/db_files/database_backup/"
+
+- name: gtar datafile 
+  unarchive:
+    src={{ item }}
+    dest=/{{ user }}/automation/db_files/
+  with_fileglob:
+    - binary/database.tar
+
+- name: copy datafile
+  shell: "cp -r /{{ user }}/automation/db_files/database/tibero/ /{{ user }}/tibero6/database/"
+
+- name: tbboot
+  shell: "{{ tb_home }}/bin/tbboot"
+
+- name: Make db user
+  shell: "tbsql sys/tibero @/{{ user }}/automation/db_files/make_user.sql"
+  args:
+    executable: "/bin/bash"

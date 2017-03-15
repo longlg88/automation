@@ -1,0 +1,19 @@
+---
+
+- name: Run PO7
+  hosts: '{{ hosts }}'
+  remote_user: '{{ user }}'
+  environment:
+    TIBERO_IP: '{{ t_ip }}'
+    TIBERO_PORT: '{{ tport }}'
+    TIBERO_USER: '{{ tid }}'
+    TIBERO_PW: '{{ tpw }}'
+    PO_WEBADMIN_PORT: '{{ po_webadminport }}'
+    PO_WEB_PORT: '{{ po_webport }}'
+    PO_IMAGE_NAME: '{{ po_image_name }}'
+  vars_files:
+    - "vars/external_vars.yml"
+
+  roles:
+    - po7_ver7
+#    - po7

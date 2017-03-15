@@ -1,0 +1,16 @@
+---
+user: root
+tid: cloudadmin
+tpw: cloudi1
+tport: 8629
+t_ip: 192.168.53.240
+po_webadminport: 9736
+po_webport: 8080
+db_image_name: tibero6:0.1
+po_image_name: newpo7b007v1
+
+#user_home: "{{ ansible_env.HOME }}"
+tb_home: "/{{ user }}/tibero6"
+tb_sid: tibero
+ansi_path: "{{ (ansible_env|default({})).PATH|default('') }}"
+tb_binary_path: "binary/tibero6-bin-FS06-linux64-140418-opt-tested.tar.gz"

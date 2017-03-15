@@ -1,0 +1,10 @@
+---
+
+- name: Run TEST
+  hosts: '{{ hosts }}'
+  remote_user: '{{ user }}'
+  
+  vars_files:
+    - "vars/external_vars.yml"
+  roles:
+    - test

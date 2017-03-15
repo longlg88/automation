@@ -1,0 +1,11 @@
+ - name: Remove lxc package
+   apt:
+     name: lxc
+     state: absent
+
+ - name: Remove bridge-utils
+   apt:
+     name: bridge-utils
+     state: absent
+
+

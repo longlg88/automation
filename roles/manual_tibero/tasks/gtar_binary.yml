@@ -1,0 +1,32 @@
+---
+- name: Check tibero tar file is exist
+  stat: path={{ tb_binary_path }}
+  register: tibero_tar_exists
+
+- name: gtar tibero
+  unarchive:
+    src={{ tb_binary_path }}
+    dest=/{{ user }}/
+  when: "tibero_tar_exists.stat.exists == False"
+
+- name: Make directory
+  file: path=/{{ user }}/tibero6/{{ item }} state=directory
+  with_items:
+    - database
+
+- name: setting setenv
+  shell: "/{{ user }}/automation/db_files/gen_setenv.sh"
+
+#- name: source setenv
+#  shell: ". /{{ user }}/automation/db_files/setenv"
+
+- name: echo environment
+  shell: "echo $LD_LIBRARY_PATH"
+
+- name: copy license
+  command: "cp /{{ user }}/automation/db_files/license/license.xml {{ tb_home }}/license"
+  register: copy_lic_result
+
+
+#- name: copy tibero datafiles
+#  command: "cp -r /{{ user }}/automation/db/tibero_database/tibero /{{ tb_home }}/database/"

@@ -1,0 +1,45 @@
+---
+- name: Tibero Installer run gen tip script
+  shell: "sh {{ tb_home }}/config/gen_tip.sh"
+  args:
+    executable: "/bin/bash"
+
+#- name: Check tbdown is exist
+#  stat: path={{ tb_home }}/bin/tbdown
+#  register: tbdown_rules
+
+#- name: Stop tibero(For initial & for reinstall)
+#  shell: "{{ tb_home }}/bin/tbdown clean"
+#  args:
+#    executable: "/bin/bash"
+#  when: "tbdown_rules.stat.exists == True "
+
+- name: Tibero nomount mode
+  shell: "{{ tb_home }}/bin/tbboot nomount"
+  args:
+    warn: no
+    executable: "/bin/bash"
+
+- name: Tibero create initial database
+  shell: "tbsql sys/tibero @/{{ user }}/automation/db_files/sql_script/create_database.sql"
+
+- name: Stop tibero
+  shell: "{{ tb_home }}/bin/tbdown"
+  args:
+    executable: "/bin/bash"
+
+- name: Tibero Boot
+  shell: "{{ tb_home }}/bin/tbboot"
+  args:
+    warn: no
+    executable: "/bin/bash"
+
+- name: Execute system script
+  shell: "sh {{ tb_home }}/scripts/system.sh -p1 tibero -p2 syscat -a1 Y -a2 Y -a3 Y -a4 Y error"
+  args:
+    executable: "/bin/bash"
+
+- name: Make db user
+  shell: "tbsql sys/tibero @/{{ user }}/automation/db_files/make_user.sql"
+  args:
+    executable: "/bin/bash"
